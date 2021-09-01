@@ -97,6 +97,7 @@ optimizer = optim.SGD(net.parameters(), lr=args.lr,
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
+
 # Training
 def train(epoch):
     print('\nEpoch: %d' % epoch)
@@ -162,13 +163,6 @@ def test(epoch):
         best_acc = acc
         wandb.log({'best_acc': best_acc})
 
-
-for epoch in range(start_epoch, start_epoch+200):
-    train(epoch)
-    test(epoch)
-    scheduler.step()
-
-
 def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
     with torch.no_grad():
@@ -184,3 +178,10 @@ def accuracy(output, target, topk=(1,)):
             correct_k = correct[:k].reshape(-1).float().sum(0, keepdim=True)
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
+
+for epoch in range(start_epoch, start_epoch+200):
+    train(epoch)
+    test(epoch)
+    scheduler.step()
+
+
